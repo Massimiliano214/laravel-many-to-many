@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Technology;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTechnologyRequest;
+use App\Http\Requests\UpdateTechnologyRequest;
 
 class TechnologyController extends Controller
 {
@@ -14,7 +17,8 @@ class TechnologyController extends Controller
      */
     public function index()
     {
-        //
+        $technologies = Technology::all();
+        return view('admin.technologies.index', compact('technologies'));
     }
 
     /**
@@ -24,7 +28,7 @@ class TechnologyController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.technologies.create');
     }
 
     /**
@@ -33,9 +37,18 @@ class TechnologyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTechnologyRequest $request)
     {
-        //
+        $validated_data = $request->validated();
+        $validated_data['slug'] = Technology::generateSlug($request->name);
+
+        $checkTechnology = Technology::where('slug', $validated_data['slug'])->first();
+        if ($checkTechnology) {
+            return back()->withInput()->withErrors(['slug' => 'Impossibile creare il Progetto col seguente titolo.']);
+        }
+        $newTechnology = Technology::create($validated_data);
+
+        return redirect()->route('admin.technologies.show', ['technology' => $newTechnology->slug])->with('status', 'Tecnologia creata con successo!');
     }
 
     /**
@@ -46,7 +59,7 @@ class TechnologyController extends Controller
      */
     public function show(Technology $technology)
     {
-        //
+        return view('admin.technologies.show', compact('technology'));
     }
 
     /**
@@ -67,7 +80,7 @@ class TechnologyController extends Controller
      * @param  \App\Models\Technology  $technology
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Technology $technology)
+    public function update(UpdateTechnologyRequest $request, Technology $technology)
     {
         //
     }

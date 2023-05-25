@@ -27,5 +27,14 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a href="{{route('admin.technologies.index')}}" class="nav-link @if (Route::currentRouteName() == 'admin.technologies.index') active @endif">
+                <svg class="bi pe-none me-2" width="16" height="16">
+                    <use xlink:href="#home"></use>
+                </svg>
+                Tecnologie
+            </a>
+        </li>
+
     </ul>
 </div>
