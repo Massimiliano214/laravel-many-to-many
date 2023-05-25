@@ -70,7 +70,7 @@ class TechnologyController extends Controller
      */
     public function edit(Technology $technology)
     {
-        //
+        return view('admin.technologies.edit', compact('technology'));
     }
 
     /**
@@ -82,7 +82,16 @@ class TechnologyController extends Controller
      */
     public function update(UpdateTechnologyRequest $request, Technology $technology)
     {
-        //
+        $validated_data = $request->validated();
+        $validated_data['slug'] = Technology::generateSlug($request->name);
+
+        $checkTechnology = Technology::where('slug', $validated_data['slug'])->where('id', '<>', $technology->id)->first();
+        if ($checkTechnology) {
+            return back()->withInput()->withErrors(['slug' => 'Impossibile aggiornare la Tecnologia col seguente titolo.']);
+        }
+        $technology->update($validated_data);
+
+        return redirect()->route('admin.technologies.show', ['technology' => $technology->slug])->with('status', 'Tecnologia modificata con successo!');
     }
 
     /**
@@ -93,6 +102,7 @@ class TechnologyController extends Controller
      */
     public function destroy(Technology $technology)
     {
-        //
+        $technology->delete();
+        return redirect()->route('admin.technologies.index');
     }
 }
