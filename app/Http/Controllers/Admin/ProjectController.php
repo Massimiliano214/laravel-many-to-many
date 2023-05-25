@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Type;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreProjectRequest;
@@ -33,7 +34,8 @@ class ProjectController extends Controller
     public function create()
     {   
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -61,6 +63,10 @@ class ProjectController extends Controller
             return back()->withInput()->withErrors(['slug' => 'Impossibile creare il Progetto col seguente titolo.']);
         }
         $newProject = Project::create($validated_data);
+
+        if ($request->has('technologies')) {
+            $newProject->technologies()->attach($request->technologies);
+        }
 
         return redirect()->route('admin.projects.show', ['project' => $newProject->slug])->with('status', 'Progetto creato con successo!');
     }

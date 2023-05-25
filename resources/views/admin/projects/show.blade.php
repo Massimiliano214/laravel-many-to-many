@@ -7,7 +7,14 @@
         <h2>Titolo: {{$project->title}}</h2>
         <h2>Titolo 2: {{$project->slug}}</h2>
         <p>Tipologia: {{$project->type?$project->type->name:'Nessuna tipologia salvata'}}</p>
-        <p>Tecnologia: {{$project->technology?$project->technology->name:'Nessuna tecnologia salvata'}}</p>
+
+        <h4>Tecnologia:</h4>
+        @foreach ($project->technologies as $technology)
+        
+            <p>{{$technology->name . ';'}}</p>
+
+        @endforeach
+
         <p>Descrizione: {{$project->content}}</p>
     </div>
 @endsection
