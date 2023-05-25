@@ -7,6 +7,7 @@
         <tr>
             <th scope="col">id</th>
             <th scope="col">Nome</th>
+            <th scope="col">Numero di Progetti</th>
             <th scope="col">Azioni</th>
         </tr>
         </thead>
@@ -15,6 +16,7 @@
                 <tr>
                     <td>{{$type->id}}</td>
                     <td>{{$type->name}}</td>
+                    <td>{{count($type->projects)}}</td>
                     <td class="d-flex">
                         <a class="btn btn-primary me-3" href="{{route('admin.types.show', ['type' => $type->id])}}">Dettagli</a>
                         <a class="btn btn-secondary me-3" href="{{route('admin.types.edit', ['type' => $type->id])}}">Modifica</a>
