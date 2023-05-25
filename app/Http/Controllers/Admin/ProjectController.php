@@ -93,7 +93,8 @@ class ProjectController extends Controller
     {   
         //$project = Project::findOrFail($id);
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -122,6 +123,9 @@ class ProjectController extends Controller
             return back()->withInput()->withErrors(['slug' => 'Impossibile aggiornare il Progetto col seguente titolo.']);
         }
         $project->update($validated_data);
+
+        $project->technologies()->sync($request->technologies);
+
         return redirect()->route('admin.projects.show', ['project' => $project->slug])->with('status', 'Progetto modificato con successo!');
     }
 

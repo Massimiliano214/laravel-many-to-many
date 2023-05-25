@@ -43,7 +43,7 @@
                 
                 @endforeach
 
-                @error('title')
+                @error('technologies')
                     <div class="invalid-feedback">
                         {{$message}}
                     </div>
