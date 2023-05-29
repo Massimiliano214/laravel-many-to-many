@@ -129,6 +129,18 @@ class ProjectController extends Controller
         if ($checkProject) {
             return back()->withInput()->withErrors(['slug' => 'Impossibile aggiornare il Progetto col seguente titolo.']);
         }
+
+        if ($request->hasFile('cover_image')) {
+
+            if ($project->cover_image) {
+                Storage::delete($project->cover_image);
+            }
+
+            $path = Storage::put('cover', $request->cover_image);
+            $validated_data['cover_image'] = $path;
+
+        }
+
         $project->update($validated_data);
 
         $project->technologies()->sync($request->technologies);
