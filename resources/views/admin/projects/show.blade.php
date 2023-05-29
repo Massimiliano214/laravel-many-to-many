@@ -15,6 +15,12 @@
 
         @endforeach
 
+        <div>
+            @if ($project->cover_image)
+            <img src="{{asset('storage/' . $project->cover_image)}}" alt="{{$project->title}}"/>
+        @endif
+        </div>
+
         <p>Descrizione: {{$project->content}}</p>
     </div>
 @endsection
